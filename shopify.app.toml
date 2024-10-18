@@ -3,7 +3,7 @@
 client_id = "8d9b9ff2491862b70d72bcc0b992d226"
 name = "Test"
 handle = "test-15952"
-application_url = "https://rick-signal-gardening-television.trycloudflare.com"
+application_url = "https://own-amino-nursing-aquatic.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_products,write_products"
 
 [auth]
 redirect_urls = [
-  "https://rick-signal-gardening-television.trycloudflare.com/auth/callback",
-  "https://rick-signal-gardening-television.trycloudflare.com/auth/shopify/callback",
-  "https://rick-signal-gardening-television.trycloudflare.com/api/auth/callback"
+  "https://own-amino-nursing-aquatic.trycloudflare.com/auth/callback",
+  "https://own-amino-nursing-aquatic.trycloudflare.com/auth/shopify/callback",
+  "https://own-amino-nursing-aquatic.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

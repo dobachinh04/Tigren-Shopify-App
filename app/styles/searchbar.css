@@ -1,0 +1,23 @@
+.search-bar-container {
+  margin-bottom: 1rem;
+  display: flex;
+}
+
+.search-bar {
+  width: 60%; /* Chiều rộng search bar */
+  max-width: 500px;
+}
+
+.search-bar input {
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #dfe3e8;
+  font-size: 16px;
+  width: 100%;
+}
+
+/* Hover and focus */
+.search-bar input:focus {
+  border-color: #5c6ac4;
+  box-shadow: 0 0 0 2px rgba(92, 106, 196, 0.3);
+}

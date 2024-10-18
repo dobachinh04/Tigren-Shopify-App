@@ -1,5 +1,7 @@
 import { json } from "@remix-run/node";
-import { useLoaderData, Link, useNavigate } from "@remix-run/react";
+import "../styles/pagination.css";
+import "../styles/searchbar.css";
+import { useLoaderData, Link, useNavigate, useSearchParams } from "@remix-run/react";
 import { authenticate } from "../shopify.server";
 import {
   Card,
@@ -8,70 +10,55 @@ import {
   Page,
   IndexTable,
   Thumbnail,
-  Text,
+  TextField,
+  Pagination,
   Icon,
   InlineStack,
+  Text,
 } from "@shopify/polaris";
-
 import { getQRCodes } from "../models/QRCode.server";
 import { AlertDiamondIcon, ImageIcon } from "@shopify/polaris-icons";
+import { useState } from "react";
 
+// Loader lấy dữ liệu từ server
 export async function loader({ request }) {
   const { admin, session } = await authenticate.admin(request);
+  const url = new URL(request.url);
+  const page = Number(url.searchParams.get("page")) || 1;
+  const search = url.searchParams.get("search") || "";
+  const pageSize = 5; // Số lượng item mỗi trang
+
   const qrCodes = await getQRCodes(session.shop, admin.graphql);
 
+  // Lọc dữ liệu theo search term
+  const filteredQRCodes = qrCodes.filter((qr) =>
+    qr.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const paginatedQRCodes = filteredQRCodes.slice((page - 1) * pageSize, page * pageSize);
+  const totalPages = Math.ceil(filteredQRCodes.length / pageSize);
+
   return json({
-    qrCodes,
+    qrCodes: paginatedQRCodes,
+    currentPage: page,
+    totalPages,
+    search,
   });
 }
 
-const EmptyQRCodeState = ({ onAction }) => (
-  <EmptyState
-    heading="Create unique QR codes for your product"
-    action={{
-      content: "Create QR code",
-      onAction,
-    }}
-    image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
-  >
-    <p>Allow customers to scan codes and buy products using their phones.</p>
-  </EmptyState>
-);
-
+// Truncate text utility
 function truncate(str, { length = 25 } = {}) {
   if (!str) return "";
-  if (str.length <= length) return str;
-  return str.slice(0, length) + "…";
+  return str.length <= length ? str : str.slice(0, length) + "…";
 }
 
-const QRTable = ({ qrCodes }) => (
-  <IndexTable
-    resourceName={{
-      singular: "QR code",
-      plural: "QR codes",
-    }}
-    itemCount={qrCodes.length}
-    headings={[
-      { title: "Thumbnail", hidden: true },
-      { title: "Title" },
-      { title: "Product" },
-      { title: "Date created" },
-      { title: "Scans" },
-    ]}
-    selectable={false}
-  >
-    {qrCodes.map((qrCode) => (
-      <QRTableRow key={qrCode.id} qrCode={qrCode} />
-    ))}
-  </IndexTable>
-);
-
+// Row hiển thị từng QR code trong IndexTable
 const QRTableRow = ({ qrCode }) => (
   <IndexTable.Row id={qrCode.id} position={qrCode.id}>
     <IndexTable.Cell>
       <Thumbnail
         source={qrCode.productImage || ImageIcon}
-        alt={qrCode.productTitle}
+        alt={qrCode.productTitle || "No image available"}
         size="small"
       />
     </IndexTable.Cell>
@@ -81,42 +68,111 @@ const QRTableRow = ({ qrCode }) => (
     <IndexTable.Cell>
       {qrCode.productDeleted ? (
         <InlineStack align="start" gap="200">
-          <span style={{ width: "20px" }}>
-            <Icon source={AlertDiamondIcon} tone="critical" />
-          </span>
+          <Icon source={AlertDiamondIcon} tone="critical" />
           <Text tone="critical" as="span">
-            product has been deleted
+            Product has been deleted
           </Text>
         </InlineStack>
       ) : (
         truncate(qrCode.productTitle)
       )}
     </IndexTable.Cell>
-    <IndexTable.Cell>
-      {new Date(qrCode.createdAt).toDateString()}
-    </IndexTable.Cell>
+    <IndexTable.Cell>{new Date(qrCode.createdAt).toDateString()}</IndexTable.Cell>
     <IndexTable.Cell>{qrCode.scans}</IndexTable.Cell>
   </IndexTable.Row>
 );
 
+// Component chính hiển thị IndexTable, search và pagination
 export default function Index() {
-  const { qrCodes } = useLoaderData();
+  const { qrCodes, currentPage, totalPages, search } = useLoaderData();
+  const [searchValue, setSearchValue] = useState(search);
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+
+  const handleSearchChange = (value) => {
+    setSearchValue(value);
+    navigate(`?search=${value}&page=1`);
+  };
+
+  const handlePageChange = (newPage) => {
+    navigate(`?search=${params.get("search") || ""}&page=${newPage}`);
+  };
 
   return (
-    <Page>
-      <ui-title-bar title="QR codes">
-        <button variant="primary" onClick={() => navigate("/app/qrcodes/new")}>
-          Create QR code
-        </button>
-      </ui-title-bar>
+    <Page
+      title="QR codes"
+      primaryAction={{
+        content: "Create QR code",
+        onAction: () => navigate("/app/qrcodes/new"),
+      }}
+    >
       <Layout>
         <Layout.Section>
-          <Card padding="0">
+          <Card>
+          <div className="search-bar-container">
+              <TextField
+                label="Search QR codes"
+                value={searchValue}
+                onChange={handleSearchChange}
+                autoComplete="off"
+                placeholder="Search by title"
+                className="search-bar"
+              />
+            </div>
+
             {qrCodes.length === 0 ? (
-              <EmptyQRCodeState onAction={() => navigate("qrcodes/new")} />
+              <EmptyState
+                heading="No QR codes found"
+                action={{
+                  content: "Create QR code",
+                  onAction: () => navigate("/app/qrcodes/new"),
+                }}
+                image="https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png"
+              >
+                <p>Try adjusting your search or create a new QR code.</p>
+              </EmptyState>
             ) : (
-              <QRTable qrCodes={qrCodes} />
+              <>
+                <IndexTable
+                  resourceName={{ singular: "QR code", plural: "QR codes" }}
+                  itemCount={qrCodes.length}
+                  headings={[
+                    { title: "Thumbnail", hidden: true },
+                    { title: "Title" },
+                    { title: "Product" },
+                    { title: "Date created" },
+                    { title: "Scans" },
+                  ]}
+                  selectable={false}
+                >
+                  {qrCodes.map((qrCode) => (
+                    <QRTableRow key={qrCode.id} qrCode={qrCode} />
+                  ))}
+                </IndexTable>
+
+                <div className="pagination-container">
+                  <button
+                    className="pagination-button"
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage <= 1}
+                  >
+                    Previous
+                  </button>
+
+                  {/* Hiển thị số trang hiện tại / tổng số trang */}
+                  <span className="pagination-info">
+                    Page {currentPage} of {totalPages}
+                  </span>
+
+                  <button
+                    className="pagination-button"
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage >= totalPages}
+                  >
+                    Next
+                  </button>
+                </div>
+              </>
             )}
           </Card>
         </Layout.Section>
