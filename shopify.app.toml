@@ -3,7 +3,7 @@
 client_id = "8d9b9ff2491862b70d72bcc0b992d226"
 name = "QR-Codes"
 handle = "test-15952"
-application_url = "https://accidents-si-dimensional-browsers.trycloudflare.com"
+application_url = "https://trades-demands-choice-shakespeare.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_products,write_products"
 
 [auth]
 redirect_urls = [
-  "https://accidents-si-dimensional-browsers.trycloudflare.com/auth/callback",
-  "https://accidents-si-dimensional-browsers.trycloudflare.com/auth/shopify/callback",
-  "https://accidents-si-dimensional-browsers.trycloudflare.com/api/auth/callback"
+  "https://trades-demands-choice-shakespeare.trycloudflare.com/auth/callback",
+  "https://trades-demands-choice-shakespeare.trycloudflare.com/auth/shopify/callback",
+  "https://trades-demands-choice-shakespeare.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
