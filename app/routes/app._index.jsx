@@ -18,7 +18,7 @@ import {
 } from "@shopify/polaris";
 import { getQRCodes } from "../models/QRCode.server";
 import { AlertDiamondIcon, ImageIcon } from "@shopify/polaris-icons";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 // Loader lấy dữ liệu từ server
 export async function loader({ request }) {
@@ -89,13 +89,33 @@ export default function Index() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
 
-  const handleSearchChange = (value) => {
-    setSearchValue(value);
-    navigate(`?search=${value}&page=1`);
-  };
+  // const handleSearchChange = (value) => {
+  //   setSearchValue(value);
+  //   navigate(`?search=${value}&page=1`);
+  // };
+
+  function debounce(func, wait) {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+  }
 
   const handlePageChange = (newPage) => {
     navigate(`?search=${params.get("search") || ""}&page=${newPage}`);
+  };
+
+  const debouncedSearch = useCallback(
+    debounce((value) => {
+      navigate(`?search=${value}&page=1`);
+    }, 2000),
+    [navigate]
+  );
+
+  const handleSearchChange = (value) => {
+    setSearchValue(value);
+    debouncedSearch(value);
   };
 
   return (
