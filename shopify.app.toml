@@ -1,9 +1,9 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "8d9b9ff2491862b70d72bcc0b992d226"
-name = "Test"
+name = "QR-Codes"
 handle = "test-15952"
-application_url = "https://dealing-serbia-irish-walk.trycloudflare.com"
+application_url = "https://december-preservation-cheap-polyester.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_products,write_products"
 
 [auth]
 redirect_urls = [
-  "https://dealing-serbia-irish-walk.trycloudflare.com/auth/callback",
-  "https://dealing-serbia-irish-walk.trycloudflare.com/auth/shopify/callback",
-  "https://dealing-serbia-irish-walk.trycloudflare.com/api/auth/callback"
+  "https://december-preservation-cheap-polyester.trycloudflare.com/auth/callback",
+  "https://december-preservation-cheap-polyester.trycloudflare.com/auth/shopify/callback",
+  "https://december-preservation-cheap-polyester.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
