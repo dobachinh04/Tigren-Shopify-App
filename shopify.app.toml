@@ -3,7 +3,7 @@
 client_id = "8d9b9ff2491862b70d72bcc0b992d226"
 name = "QR-Codes"
 handle = "test-15952"
-application_url = "https://december-preservation-cheap-polyester.trycloudflare.com"
+application_url = "https://tr-surface-automotive-bras.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_products,write_products"
 
 [auth]
 redirect_urls = [
-  "https://december-preservation-cheap-polyester.trycloudflare.com/auth/callback",
-  "https://december-preservation-cheap-polyester.trycloudflare.com/auth/shopify/callback",
-  "https://december-preservation-cheap-polyester.trycloudflare.com/api/auth/callback"
+  "https://tr-surface-automotive-bras.trycloudflare.com/auth/callback",
+  "https://tr-surface-automotive-bras.trycloudflare.com/auth/shopify/callback",
+  "https://tr-surface-automotive-bras.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
