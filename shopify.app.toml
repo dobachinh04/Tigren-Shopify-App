@@ -1,45 +1,21 @@
-# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
-
-client_id = "8d9b9ff2491862b70d72bcc0b992d226"
-name = "QR-Codes"
-handle = "test-15952"
-application_url = "https://trades-demands-choice-shakespeare.trycloudflare.com"
+# This file stores configurations for your Shopify app.
+name = "Example App"
+client_id = "459a1eb3fff01f2eaa7fd1e5d446c1cd"
+application_url = "https://quickstart-9fa495fe.myshopify.com/"
 embedded = true
-
-[build]
-automatically_update_urls_on_dev = true
-dev_store_url = "quickstart-9fa495fe.myshopify.com"
-include_config_on_deploy = true
-
-[access_scopes]
-# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_products,write_products"
+handle = "example-app"
 
 [auth]
-redirect_urls = [
-  "https://trades-demands-choice-shakespeare.trycloudflare.com/auth/callback",
-  "https://trades-demands-choice-shakespeare.trycloudflare.com/auth/shopify/callback",
-  "https://trades-demands-choice-shakespeare.trycloudflare.com/api/auth/callback"
-]
+redirect_urls = ["https://40d0-14-232-161-225.ngrok-free.app/auth/callback"]
+
+[access_scopes]
+scopes = "write_products, read_orders, read_products, write_products"
 
 [webhooks]
-api_version = "2024-10"
+api_version = "2024-07"
 
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/customers/data_request"
-  compliance_topics = [ "customers/data_request" ]
 
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/customers/redact"
-  compliance_topics = [ "customers/redact" ]
 
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/shop/redact"
-  compliance_topics = [ "shop/redact" ]
-
-  [[webhooks.subscriptions]]
-  topics = [ "app/uninstalled" ]
-  uri = "/webhooks/app/uninstalled"
-
-[pos]
-embedded = false
+[[webhooks.subscriptions]]
+topics = ["orders/create"]
+uri = "https://40d0-14-232-161-225.ngrok-free.app/webhooks"
