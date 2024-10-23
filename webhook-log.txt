@@ -425,3 +425,23 @@ Order received at 2024-10-23T03:34:22.468Z:
   "returns": []
 }
 
+Order deleted at 2024-10-23T04:00:29.588Z:
+{
+  "id": 820982911946154500
+}
+
+Product updated at 2024-10-23T04:10:06.195Z:
+Title: Example T-Shirt
+Price: undefined
+Inventory: undefined
+
+Product updated at 2024-10-23T04:12:44.596Z:
+Title: Selling Plans Ski Wax
+Price: undefined
+Inventory: undefined
+
+Product updated at 2024-10-23T04:12:45.140Z:
+Title: The 3p Fulfilled Snowboard
+Price: undefined
+Inventory: undefined
+
