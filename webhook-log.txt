@@ -1,0 +1,427 @@
+Order received at 2024-10-23T03:34:22.468Z:
+{
+  "id": 5740813811879,
+  "admin_graphql_api_id": "gid://shopify/Order/5740813811879",
+  "app_id": 580111,
+  "browser_ip": "14.232.161.225",
+  "buyer_accepts_marketing": false,
+  "cancel_reason": null,
+  "cancelled_at": null,
+  "cart_token": "Z2NwLXVzLWNlbnRyYWwxOjAxSkFWUFZOU1MxU0pBUkVHWDc3MFk3NU4z",
+  "checkout_id": 30906032259239,
+  "checkout_token": "65370db320523802cac23722f9b20a53",
+  "client_details": {
+    "accept_language": "en-VN",
+    "browser_height": null,
+    "browser_ip": "14.232.161.225",
+    "browser_width": null,
+    "session_hash": null,
+    "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36"
+  },
+  "closed_at": null,
+  "company": null,
+  "confirmation_number": "EJLXIG5K7",
+  "confirmed": true,
+  "contact_email": "dobachinh04@gmail.com",
+  "created_at": "2024-10-22T23:34:18-04:00",
+  "currency": "USD",
+  "current_shipping_price_set": {
+    "shop_money": {
+      "amount": "0.00",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "0",
+      "currency_code": "VND"
+    }
+  },
+  "current_subtotal_price": "2696.08",
+  "current_subtotal_price_set": {
+    "shop_money": {
+      "amount": "2696.08",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "68120000",
+      "currency_code": "VND"
+    }
+  },
+  "current_total_additional_fees_set": null,
+  "current_total_discounts": "0.00",
+  "current_total_discounts_set": {
+    "shop_money": {
+      "amount": "0.00",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "0",
+      "currency_code": "VND"
+    }
+  },
+  "current_total_duties_set": null,
+  "current_total_price": "2965.69",
+  "current_total_price_set": {
+    "shop_money": {
+      "amount": "2965.69",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "74931953",
+      "currency_code": "VND"
+    }
+  },
+  "current_total_tax": "269.61",
+  "current_total_tax_set": {
+    "shop_money": {
+      "amount": "269.61",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "6811953",
+      "currency_code": "VND"
+    }
+  },
+  "customer_locale": "en-VN",
+  "device_id": null,
+  "discount_codes": [],
+  "duties_included": false,
+  "email": "dobachinh04@gmail.com",
+  "estimated_taxes": false,
+  "financial_status": "paid",
+  "fulfillment_status": null,
+  "landing_site": "/",
+  "landing_site_ref": null,
+  "location_id": null,
+  "merchant_business_entity_id": "MTY2ODgwOTI5OTU5",
+  "merchant_of_record_app_id": null,
+  "name": "#1002",
+  "note": null,
+  "note_attributes": [],
+  "number": 2,
+  "order_number": 1002,
+  "order_status_url": "https://quickstart-9fa495fe.myshopify.com/66880929959/orders/29f469a2fb870c449ddbc7fbd4336399/authenticate?key=217bdc266915b5a4efd2a6b8611e629c",
+  "original_total_additional_fees_set": null,
+  "original_total_duties_set": null,
+  "payment_gateway_names": [
+    "bogus"
+  ],
+  "phone": null,
+  "po_number": null,
+  "presentment_currency": "VND",
+  "processed_at": "2024-10-22T23:34:16-04:00",
+  "reference": "324be1f48d8e3d9722e2ac9acc19a3b0",
+  "referring_site": "",
+  "source_identifier": "324be1f48d8e3d9722e2ac9acc19a3b0",
+  "source_name": "web",
+  "source_url": null,
+  "subtotal_price": "2696.08",
+  "subtotal_price_set": {
+    "shop_money": {
+      "amount": "2696.08",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "68120000",
+      "currency_code": "VND"
+    }
+  },
+  "tags": "",
+  "tax_exempt": false,
+  "tax_lines": [
+    {
+      "price": "269.61",
+      "rate": 0.1,
+      "title": "VAT",
+      "price_set": {
+        "shop_money": {
+          "amount": "269.61",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "6811953",
+          "currency_code": "VND"
+        }
+      },
+      "channel_liable": false
+    }
+  ],
+  "taxes_included": false,
+  "test": true,
+  "token": "29f469a2fb870c449ddbc7fbd4336399",
+  "total_cash_rounding_payment_adjustment_set": {
+    "shop_money": {
+      "amount": "0.00",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "0",
+      "currency_code": "VND"
+    }
+  },
+  "total_cash_rounding_refund_adjustment_set": {
+    "shop_money": {
+      "amount": "0.00",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "0",
+      "currency_code": "VND"
+    }
+  },
+  "total_discounts": "0.00",
+  "total_discounts_set": {
+    "shop_money": {
+      "amount": "0.00",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "0",
+      "currency_code": "VND"
+    }
+  },
+  "total_line_items_price": "2696.08",
+  "total_line_items_price_set": {
+    "shop_money": {
+      "amount": "2696.08",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "68120000",
+      "currency_code": "VND"
+    }
+  },
+  "total_outstanding": "0.00",
+  "total_price": "2965.69",
+  "total_price_set": {
+    "shop_money": {
+      "amount": "2965.69",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "74931953",
+      "currency_code": "VND"
+    }
+  },
+  "total_shipping_price_set": {
+    "shop_money": {
+      "amount": "0.00",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "0",
+      "currency_code": "VND"
+    }
+  },
+  "total_tax": "269.61",
+  "total_tax_set": {
+    "shop_money": {
+      "amount": "269.61",
+      "currency_code": "USD"
+    },
+    "presentment_money": {
+      "amount": "6811953",
+      "currency_code": "VND"
+    }
+  },
+  "total_tip_received": "0.00",
+  "total_weight": 0,
+  "updated_at": "2024-10-22T23:34:20-04:00",
+  "user_id": null,
+  "billing_address": {
+    "first_name": "Đỗ Bá",
+    "address1": "Hanoi",
+    "phone": null,
+    "city": "Hanoi",
+    "zip": "100000",
+    "province": null,
+    "country": "Vietnam",
+    "last_name": "Chính",
+    "address2": null,
+    "company": null,
+    "latitude": null,
+    "longitude": null,
+    "name": "Đỗ Bá Chính",
+    "country_code": "VN",
+    "province_code": null
+  },
+  "customer": {
+    "id": 7856488087719,
+    "email": "dobachinh04@gmail.com",
+    "created_at": "2024-10-22T03:16:10-04:00",
+    "updated_at": "2024-10-22T23:34:19-04:00",
+    "first_name": "Đỗ Bá",
+    "last_name": "Chính",
+    "state": "disabled",
+    "note": null,
+    "verified_email": true,
+    "multipass_identifier": null,
+    "tax_exempt": false,
+    "phone": null,
+    "email_marketing_consent": {
+      "state": "not_subscribed",
+      "opt_in_level": "single_opt_in",
+      "consent_updated_at": null
+    },
+    "sms_marketing_consent": null,
+    "tags": "",
+    "currency": "USD",
+    "tax_exemptions": [],
+    "admin_graphql_api_id": "gid://shopify/Customer/7856488087719",
+    "default_address": {
+      "id": 8795042545831,
+      "customer_id": 7856488087719,
+      "first_name": "Đỗ Bá",
+      "last_name": "Chính",
+      "company": null,
+      "address1": "Hanoi",
+      "address2": null,
+      "city": "Hanoi",
+      "province": null,
+      "country": "Vietnam",
+      "zip": "100000",
+      "phone": null,
+      "name": "Đỗ Bá Chính",
+      "province_code": null,
+      "country_code": "VN",
+      "country_name": "Vietnam",
+      "default": true
+    }
+  },
+  "discount_applications": [],
+  "fulfillments": [],
+  "line_items": [
+    {
+      "id": 13518860320935,
+      "admin_graphql_api_id": "gid://shopify/LineItem/13518860320935",
+      "attributed_staffs": [],
+      "current_quantity": 1,
+      "fulfillable_quantity": 1,
+      "fulfillment_service": "snow-city-warehouse",
+      "fulfillment_status": null,
+      "gift_card": false,
+      "grams": 0,
+      "name": "The 3p Fulfilled Snowboard",
+      "price": "2696.08",
+      "price_set": {
+        "shop_money": {
+          "amount": "2696.08",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "68120000",
+          "currency_code": "VND"
+        }
+      },
+      "product_exists": true,
+      "product_id": 8378615070887,
+      "properties": [],
+      "quantity": 1,
+      "requires_shipping": true,
+      "sku": "sku-hosted-1",
+      "taxable": true,
+      "title": "The 3p Fulfilled Snowboard",
+      "total_discount": "0.00",
+      "total_discount_set": {
+        "shop_money": {
+          "amount": "0.00",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "0",
+          "currency_code": "VND"
+        }
+      },
+      "variant_id": 46188478202023,
+      "variant_inventory_management": "shopify",
+      "variant_title": null,
+      "vendor": "Quickstart (9fa495fe)",
+      "tax_lines": [
+        {
+          "channel_liable": false,
+          "price": "269.61",
+          "price_set": {
+            "shop_money": {
+              "amount": "269.61",
+              "currency_code": "USD"
+            },
+            "presentment_money": {
+              "amount": "6811953",
+              "currency_code": "VND"
+            }
+          },
+          "rate": 0.1,
+          "title": "VAT"
+        }
+      ],
+      "duties": [],
+      "discount_allocations": []
+    }
+  ],
+  "payment_terms": null,
+  "refunds": [],
+  "shipping_address": {
+    "first_name": "Đỗ Bá",
+    "address1": "Hanoi",
+    "phone": null,
+    "city": "Hanoi",
+    "zip": "100000",
+    "province": null,
+    "country": "Vietnam",
+    "last_name": "Chính",
+    "address2": null,
+    "company": null,
+    "latitude": 21.0327675,
+    "longitude": 105.8308419,
+    "name": "Đỗ Bá Chính",
+    "country_code": "VN",
+    "province_code": null
+  },
+  "shipping_lines": [
+    {
+      "id": 4505864601767,
+      "carrier_identifier": null,
+      "code": "Standard",
+      "current_discounted_price_set": {
+        "shop_money": {
+          "amount": "0.00",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "0",
+          "currency_code": "VND"
+        }
+      },
+      "discounted_price": "0.00",
+      "discounted_price_set": {
+        "shop_money": {
+          "amount": "0.00",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "0",
+          "currency_code": "VND"
+        }
+      },
+      "is_removed": false,
+      "phone": null,
+      "price": "0.00",
+      "price_set": {
+        "shop_money": {
+          "amount": "0.00",
+          "currency_code": "USD"
+        },
+        "presentment_money": {
+          "amount": "0",
+          "currency_code": "VND"
+        }
+      },
+      "requested_fulfillment_service_id": null,
+      "source": "shopify",
+      "title": "Standard",
+      "tax_lines": [],
+      "discount_allocations": []
+    }
+  ],
+  "returns": []
+}
+
