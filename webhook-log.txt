@@ -435,13 +435,16 @@ Title: Example T-Shirt
 Price: undefined
 Inventory: undefined
 
-Product updated at 2024-10-23T04:12:44.596Z:
-Title: Selling Plans Ski Wax
-Price: undefined
-Inventory: undefined
 
-Product updated at 2024-10-23T04:12:45.140Z:
-Title: The 3p Fulfilled Snowboard
-Price: undefined
-Inventory: undefined
+Order received at 2024-10-23T04:47:19.945Z:
+{
+  "id": 12345,
+  "name": "Order Test",
+  "items": [
+    {
+      "product_id": 67890,
+      "quantity": 2
+    }
+  ]
+}
 

@@ -1,11 +1,29 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');  // Import module fs để thao tác với file
+const crypto = require('crypto'); // Import module crypto để tính toán HMAC
 
 const app = express();
 const PORT = 3000;
 
+const SHOPIFY_SECRET = '459a1eb3fff01f2eaa7fd1e5d446c1cd';
+
 app.use(bodyParser.json());
+
+// Hàm để xác minh chữ ký HMAC
+function verifyHMAC(req) {
+  const hmacHeader = req.get('X-Shopify-Hmac-Sha256'); // Lấy chữ ký HMAC từ header
+  const payload = JSON.stringify(req.body); // Chuyển đổi payload thành chuỗi JSON
+
+  // Tính toán HMAC từ payload
+  const calculatedHMAC = crypto
+    .createHmac('sha256', SHOPIFY_SECRET)
+    .update(payload, 'utf8')
+    .digest('base64'); // Chuyển đổi HMAC thành base64
+
+  // So sánh chữ ký HMAC
+  return crypto.timingSafeEqual(Buffer.from(hmacHeader, 'base64'), Buffer.from(calculatedHMAC, 'base64'));
+}
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -13,6 +31,10 @@ app.get("/", (req, res) => {
 
 // Webhook cho sự kiện tạo đơn hàng
 app.post('/webhook/orders/create', (req, res) => {
+  if (!verifyHMAC(req)) {
+    return res.status(401).send('Forbidden: Invalid HMAC signature, Webhook Rejected!');
+  }
+
   const orderData = req.body;
 
   // Ghi log ra console
