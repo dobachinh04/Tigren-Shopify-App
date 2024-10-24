@@ -1,20 +1,45 @@
-name = "Example App"
-client_id = "459a1eb3fff01f2eaa7fd1e5d446c1cd"
-application_url = "https://quickstart-9fa495fe.myshopify.com/"
-embedded = true
-handle = "example-app"
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-[auth]
-redirect_urls = ["https://068c-14-232-161-225.ngrok-free.app/auth/callback"]
+client_id = "8d9b9ff2491862b70d72bcc0b992d226"
+name = "Tigren App"
+handle = "tigren-app"
+application_url = "https://k-welfare-objects-prediction.trycloudflare.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "quickstart-9fa495fe.myshopify.com"
+include_config_on_deploy = true
 
 [access_scopes]
-scopes = "write_products, read_orders, read_products"
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_products,write_products"
+
+[auth]
+redirect_urls = [
+  "https://k-welfare-objects-prediction.trycloudflare.com/auth/callback",
+  "https://k-welfare-objects-prediction.trycloudflare.com/auth/shopify/callback",
+  "https://k-welfare-objects-prediction.trycloudflare.com/api/auth/callback"
+]
 
 [webhooks]
-api_version = "2024-07"
+api_version = "2024-10"
 
+  [[webhooks.subscriptions]]
+  uri = "https://pounds-transport-linked-yea.trycloudflare.com/webhooks/customers/data_request"
+  compliance_topics = [ "customers/data_request" ]
 
+  [[webhooks.subscriptions]]
+  uri = "https://pounds-transport-linked-yea.trycloudflare.com/webhooks/customers/redact"
+  compliance_topics = [ "customers/redact" ]
 
-[[webhooks.subscriptions]]
-topics = ["orders/create"]
-uri = "https://068c-14-232-161-225.ngrok-free.app/webhooks"
+  [[webhooks.subscriptions]]
+  uri = "https://pounds-transport-linked-yea.trycloudflare.com/webhooks/shop/redact"
+  compliance_topics = [ "shop/redact" ]
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "https://pounds-transport-linked-yea.trycloudflare.com/webhooks/app/uninstalled"
+
+[pos]
+embedded = false

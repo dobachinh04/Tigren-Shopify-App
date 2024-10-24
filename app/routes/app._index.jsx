@@ -109,7 +109,7 @@ export default function Index() {
   const debouncedSearch = useCallback(
     debounce((value) => {
       navigate(`?search=${value}&page=1`);
-    }, 2000),
+    }, 1000),
     [navigate]
   );
 
