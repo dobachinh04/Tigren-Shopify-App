@@ -23,7 +23,7 @@ export default function App() {
         <Link to="/app" rel="home">
           Home
         </Link>
-        <Link to="/app/rewardpoints">Reward Points</Link>
+        <Link to="/app/reward-points">Reward Points</Link>
         {/* <Link to="/app/qrcodes">QR Codes</Link> */}
         <Link to="/app/blogs">Blogs</Link>
         <Link to="/app/products">Products</Link>

@@ -2,8 +2,8 @@
 
 client_id = "8d9b9ff2491862b70d72bcc0b992d226"
 name = "Tigren App"
-handle = "tigren-app"
-application_url = "https://k-welfare-objects-prediction.trycloudflare.com"
+handle = "tigren-app-31"
+application_url = "https://suddenly-loud-trail-targets.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,13 +13,13 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_products,write_products"
+scopes = "read_customers,read_orders,read_products,write_customers,write_orders,write_products"
 
 [auth]
 redirect_urls = [
-  "https://k-welfare-objects-prediction.trycloudflare.com/auth/callback",
-  "https://k-welfare-objects-prediction.trycloudflare.com/auth/shopify/callback",
-  "https://k-welfare-objects-prediction.trycloudflare.com/api/auth/callback"
+  "https://suddenly-loud-trail-targets.trycloudflare.com/auth/callback",
+  "https://suddenly-loud-trail-targets.trycloudflare.com/auth/shopify/callback",
+  "https://suddenly-loud-trail-targets.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

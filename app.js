@@ -31,19 +31,19 @@ app.get("/", (req, res) => {
 
 // Webhook cho sự kiện tạo đơn hàng
 app.post('/webhook/orders/create', (req, res) => {
-  if (!verifyHMAC(req)) {
-    // Ghi log trạng thái thất bại khi xác minh HMAC
-    const logEntry = `HMAC verification failed at ${new Date().toISOString()}: Invalid HMAC signature!\n\n`;
-    fs.appendFile('webhook-log.txt', logEntry, (err) => {
-      if (err) {
-        console.error('Failed to write to log file', err);
-      } else {
-        console.log('HMAC verification failure logged successfully.');
-      }
-    });
+  // if (!verifyHMAC(req)) {
+  //   // Ghi log trạng thái thất bại khi xác minh HMAC
+  //   const logEntry = `HMAC verification failed at ${new Date().toISOString()}: Invalid HMAC signature!\n\n`;
+  //   fs.appendFile('webhook-log.txt', logEntry, (err) => {
+  //     if (err) {
+  //       console.error('Failed to write to log file', err);
+  //     } else {
+  //       console.log('HMAC verification failure logged successfully.');
+  //     }
+  //   });
 
-    return res.status(401).send('Forbidden: Invalid HMAC signature, Webhook Rejected!');
-  }
+  //   return res.status(401).send('Forbidden: Invalid HMAC signature, Webhook Rejected!');
+  // }
 
   const orderData = req.body;
 
