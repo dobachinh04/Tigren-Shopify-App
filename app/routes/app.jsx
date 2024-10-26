@@ -25,8 +25,8 @@ export default function App() {
         </Link>
         <Link to="/app/reward-points">Reward Points</Link>
         {/* <Link to="/app/qrcodes">QR Codes</Link> */}
-        <Link to="/app/blogs">Blogs</Link>
         <Link to="/app/products">Products</Link>
+        <Link to="/app/blogs">Blogs</Link>
       </NavMenu>
       <Outlet />
     </AppProvider>
