@@ -1,4 +1,5 @@
 // app/routes/app.products.jsx
+
 import React, { useState, useCallback } from "react";
 import {
   Page,
@@ -20,7 +21,7 @@ import { useLoaderData, useFetcher } from "@remix-run/react";
 import { apiVersion, authenticate } from "../shopify.server";
 import "../styles/reward-points.css";
 
-// GraphQL query để lấy danh sách sản phẩm
+// GraphQL query to fetch products
 const query = `
   {
     products(first: 10) {
@@ -48,7 +49,7 @@ const query = `
   }
 `;
 
-// GraphQL mutation để xóa sản phẩm
+// GraphQL mutation to delete a product
 const DELETE_PRODUCT_MUTATION = `
   mutation deleteProduct($id: ID!) {
     productDelete(input: { id: $id }) {
@@ -61,7 +62,23 @@ const DELETE_PRODUCT_MUTATION = `
   }
 `;
 
-// Loader để lấy dữ liệu từ Shopify
+// GraphQL mutation to edit a product title
+const EDIT_PRODUCT_TITLE_MUTATION = `
+  mutation updateProductTitle($id: ID!, $title: String!) {
+    productUpdate(input: { id: $id, title: $title }) {
+      product {
+        id
+        title
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+// Loader to fetch product data from Shopify
 export const loader = async ({ request }) => {
   const { session } = await authenticate.admin(request);
   const { shop, accessToken } = session;
@@ -105,36 +122,63 @@ export const loader = async ({ request }) => {
   }
 };
 
-// Action để xử lý mutation xóa sản phẩm
+// Action to handle product mutations (delete, edit title)
 export const action = async ({ request }) => {
   const { session } = await authenticate.admin(request);
   const { shop, accessToken } = session;
 
   const formData = await request.formData();
+  const actionType = formData.get("action");
   const productId = formData.get("id");
 
-  const response = await fetch(
-    `https://${shop}/admin/api/${apiVersion}/graphql.json`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Shopify-Access-Token": accessToken,
-      },
-      body: JSON.stringify({
-        query: DELETE_PRODUCT_MUTATION,
-        variables: { id: productId },
-      }),
+  if (actionType === "delete") {
+    const response = await fetch(
+      `https://${shop}/admin/api/${apiVersion}/graphql.json`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Shopify-Access-Token": accessToken,
+        },
+        body: JSON.stringify({
+          query: DELETE_PRODUCT_MUTATION,
+          variables: { id: productId },
+        }),
+      }
+    );
+
+    const result = await response.json();
+    if (result.errors || result.data.productDelete.userErrors.length > 0) {
+      console.error("Error deleting product:", result.errors);
+      return { success: false, error: "Failed to delete product" };
     }
-  );
 
-  const result = await response.json();
-  if (result.errors || result.data.productDelete.userErrors.length > 0) {
-    console.error("Error deleting product:", result.errors);
-    return { success: false, error: "Failed to delete product" };
+    return { success: true };
+  } else if (actionType === "editTitle") {
+    const newTitle = formData.get("title");
+    const response = await fetch(
+      `https://${shop}/admin/api/${apiVersion}/graphql.json`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Shopify-Access-Token": accessToken,
+        },
+        body: JSON.stringify({
+          query: EDIT_PRODUCT_TITLE_MUTATION,
+          variables: { id: productId, title: newTitle },
+        }),
+      }
+    );
+
+    const result = await response.json();
+    if (result.errors || result.data.productUpdate.userErrors.length > 0) {
+      console.error("Error updating product title:", result.errors);
+      return { success: false, error: "Failed to update product title" };
+    }
+
+    return { success: true };
   }
-
-  return { success: true };
 };
 
 function ProductsPage() {
@@ -143,35 +187,67 @@ function ProductsPage() {
   const [products, setProducts] = useState(productsData);
   const [showToast, setShowToast] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [productToDelete, setProductToDelete] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [productToEdit, setProductToEdit] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(productsData);
 
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
     useIndexResourceState(filteredProducts);
 
-  // Hiển thị modal xác nhận xóa
+  // Show delete confirmation modal
   const handleDeleteClick = (id) => {
-    setProductToDelete(id);
+    setProductToEdit(id);
     setShowModal(true);
   };
 
-  // Xác nhận xóa sản phẩm
+  // Confirm delete product
   const confirmDelete = useCallback(() => {
-    if (!productToDelete) return;
+    if (!productToEdit) return;
     fetcher.submit(
-      { id: productToDelete },
-      { method: "post", action: "/app/products?action=delete" }
+      { id: productToEdit, action: "delete" },
+      { method: "post", action: "/app/products" }
     );
 
-    // Cập nhật state sau khi xóa
-    setProducts((prev) => prev.filter((product) => product.id !== productToDelete));
-    setFilteredProducts((prev) => prev.filter((product) => product.id !== productToDelete));
+    setProducts((prev) => prev.filter((product) => product.id !== productToEdit));
+    setFilteredProducts((prev) => prev.filter((product) => product.id !== productToEdit));
     setShowToast(true);
     setShowModal(false);
-    setProductToDelete(null);
-  }, [fetcher, productToDelete]);
+    setProductToEdit(null);
+  }, [fetcher, productToEdit]);
 
+  // Show edit modal
+  const handleEditClick = (product) => {
+    setProductToEdit(product.id);
+    setEditTitle(product.name);
+    setShowEditModal(true);
+  };
+
+  // Submit edited title
+  const confirmEdit = useCallback(() => {
+    if (!productToEdit || !editTitle) return;
+    fetcher.submit(
+      { id: productToEdit, title: editTitle, action: "editTitle" },
+      { method: "post", action: "/app/products" }
+    );
+
+    setProducts((prev) =>
+      prev.map((product) =>
+        product.id === productToEdit ? { ...product, name: editTitle } : product
+      )
+    );
+    setFilteredProducts((prev) =>
+      prev.map((product) =>
+        product.id === productToEdit ? { ...product, name: editTitle } : product
+      )
+    );
+    setShowToast(true);
+    setShowEditModal(false);
+    setProductToEdit(null);
+  }, [fetcher, productToEdit, editTitle]);
+
+  // Filter products by search value
   const handleSearch = useCallback(
     (value) => {
       setSearchValue(value);
@@ -203,7 +279,7 @@ function ProductsPage() {
         <IndexTable.Cell>{type}</IndexTable.Cell>
         <IndexTable.Cell>{vendor}</IndexTable.Cell>
         <IndexTable.Cell>
-          <Button onClick={() => console.log("Edit", id)}>Edit</Button>
+          <Button onClick={() => handleEditClick({ id, name })}>Edit</Button>
           <Button onClick={() => handleDeleteClick(id)} destructive>
             Delete
           </Button>
@@ -261,7 +337,7 @@ function ProductsPage() {
 
         {showToast && (
           <Toast
-            content="Product deleted successfully"
+            content="Action completed successfully"
             onDismiss={() => setShowToast(false)}
           />
         )}
@@ -285,6 +361,33 @@ function ProductsPage() {
           >
             <Modal.Section>
               <p>Are you sure you want to delete this product? This action cannot be undone.</p>
+            </Modal.Section>
+          </Modal>
+        )}
+
+        {showEditModal && (
+          <Modal
+            open={showEditModal}
+            onClose={() => setShowEditModal(false)}
+            title="Edit Product Title"
+            primaryAction={{
+              content: "Save",
+              onAction: confirmEdit,
+            }}
+            secondaryActions={[
+              {
+                content: "Cancel",
+                onAction: () => setShowEditModal(false),
+              },
+            ]}
+          >
+            <Modal.Section>
+              <TextField
+                label="Product Title"
+                value={editTitle}
+                onChange={setEditTitle}
+                autoComplete="off"
+              />
             </Modal.Section>
           </Modal>
         )}

@@ -3,7 +3,7 @@
 client_id = "8d9b9ff2491862b70d72bcc0b992d226"
 name = "Tigren App"
 handle = "tigren-app-liam"
-application_url = "https://complete-rugs-wb-angola.trycloudflare.com"
+application_url = "https://change-hosting-championship-televisions.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_customers,read_orders,read_products,write_customers,write_orders,
 
 [auth]
 redirect_urls = [
-  "https://complete-rugs-wb-angola.trycloudflare.com/auth/callback",
-  "https://complete-rugs-wb-angola.trycloudflare.com/auth/shopify/callback",
-  "https://complete-rugs-wb-angola.trycloudflare.com/api/auth/callback"
+  "https://change-hosting-championship-televisions.trycloudflare.com/auth/callback",
+  "https://change-hosting-championship-televisions.trycloudflare.com/auth/shopify/callback",
+  "https://change-hosting-championship-televisions.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
