@@ -1,5 +1,3 @@
-// app/routes/app.products.jsx
-
 import React, { useState, useCallback } from "react";
 import {
   Page,
@@ -21,7 +19,7 @@ import { useLoaderData, useFetcher } from "@remix-run/react";
 import { apiVersion, authenticate } from "../shopify.server";
 import "../styles/reward-points.css";
 
-// GraphQL query to fetch products
+// GraphQL query để lấy danh sách sản phẩm
 const query = `
   {
     products(first: 10) {
@@ -49,7 +47,7 @@ const query = `
   }
 `;
 
-// GraphQL mutation to delete a product
+// GraphQL mutation để xóa sản phẩm
 const DELETE_PRODUCT_MUTATION = `
   mutation deleteProduct($id: ID!) {
     productDelete(input: { id: $id }) {
@@ -62,7 +60,7 @@ const DELETE_PRODUCT_MUTATION = `
   }
 `;
 
-// GraphQL mutation to edit a product title
+// GraphQL mutation để sửa sản phẩm
 const EDIT_PRODUCT_TITLE_MUTATION = `
   mutation updateProductTitle($id: ID!, $title: String!) {
     productUpdate(input: { id: $id, title: $title }) {
@@ -78,7 +76,7 @@ const EDIT_PRODUCT_TITLE_MUTATION = `
   }
 `;
 
-// Loader to fetch product data from Shopify
+// Loader để lấy dữ liệu từ Shopify
 export const loader = async ({ request }) => {
   const { session } = await authenticate.admin(request);
   const { shop, accessToken } = session;
@@ -122,7 +120,7 @@ export const loader = async ({ request }) => {
   }
 };
 
-// Action to handle product mutations (delete, edit title)
+// Action để xử lý
 export const action = async ({ request }) => {
   const { session } = await authenticate.admin(request);
   const { shop, accessToken } = session;
@@ -196,13 +194,13 @@ function ProductsPage() {
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
     useIndexResourceState(filteredProducts);
 
-  // Show delete confirmation modal
+  // Hiển thị modal xác nhận xóa
   const handleDeleteClick = (id) => {
     setProductToEdit(id);
     setShowModal(true);
   };
 
-  // Confirm delete product
+  // Xác nhận xóa sản phẩm
   const confirmDelete = useCallback(() => {
     if (!productToEdit) return;
     fetcher.submit(
@@ -217,14 +215,14 @@ function ProductsPage() {
     setProductToEdit(null);
   }, [fetcher, productToEdit]);
 
-  // Show edit modal
+  // Hiển thị modal sửa
   const handleEditClick = (product) => {
     setProductToEdit(product.id);
     setEditTitle(product.name);
     setShowEditModal(true);
   };
 
-  // Submit edited title
+  // Xác nhận sửa title
   const confirmEdit = useCallback(() => {
     if (!productToEdit || !editTitle) return;
     fetcher.submit(
@@ -247,7 +245,6 @@ function ProductsPage() {
     setProductToEdit(null);
   }, [fetcher, productToEdit, editTitle]);
 
-  // Filter products by search value
   const handleSearch = useCallback(
     (value) => {
       setSearchValue(value);
