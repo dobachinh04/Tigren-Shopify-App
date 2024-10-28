@@ -208,10 +208,10 @@ function RewardPointsPage() {
                 { title: "Email" },
                 { title: "Phone" },
                 { title: "Address" },
-                { title: "Order Count" },
+                { title: "Total Orders" },
                 { title: "Amount Spent" },
                 { title: "Reward Points" },
-                { title: "Actions" },
+                { title: "Action" },
               ]}
             >
               {rowMarkup}

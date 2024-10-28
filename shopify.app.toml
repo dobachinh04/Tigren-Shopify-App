@@ -3,7 +3,7 @@
 client_id = "8d9b9ff2491862b70d72bcc0b992d226"
 name = "Tigren App"
 handle = "tigren-app-liam"
-application_url = "https://nec-patents-fault-shaved.trycloudflare.com"
+application_url = "https://undefined-respiratory-unlimited-rom.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_customers,read_orders,read_products,write_customers,write_orders,
 
 [auth]
 redirect_urls = [
-  "https://nec-patents-fault-shaved.trycloudflare.com/auth/callback",
-  "https://nec-patents-fault-shaved.trycloudflare.com/auth/shopify/callback",
-  "https://nec-patents-fault-shaved.trycloudflare.com/api/auth/callback"
+  "https://undefined-respiratory-unlimited-rom.trycloudflare.com/auth/callback",
+  "https://undefined-respiratory-unlimited-rom.trycloudflare.com/auth/shopify/callback",
+  "https://undefined-respiratory-unlimited-rom.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
