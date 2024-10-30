@@ -1,41 +1,39 @@
-// tigren-app/app/models/reward-points.server.js
-
 import { apiVersion, authenticate } from "../shopify.server";
 
-// Hàm lấy danh sách khách hàng
+// Function to fetch customer data
 export async function fetchCustomerData(request) {
   const { session } = await authenticate.admin(request);
   const { shop, accessToken } = session;
 
   const query = `
-  {
-    customers(first: 10) {
-      edges {
-        node {
-          id
-          firstName
-          lastName
-          phone
-          email
-          addresses {
-            country
-          }
-          orders(first: 10) {
-            nodes {
-              name
+    {
+      customers(first: 250) {
+        edges {
+          node {
+            id
+            firstName
+            lastName
+            phone
+            email
+            addresses {
+              country
             }
-          }
-          amountSpent {
-            amount
-            currencyCode
-          }
-          metafield(namespace: "custom", key: "reward_points") {
-            value
+            orders(first: 250) {
+              nodes {
+                name
+              }
+            }
+            amountSpent {
+              amount
+              currencyCode
+            }
+            metafield(namespace: "custom", key: "reward_points") {
+              value
+            }
           }
         }
       }
     }
-  }
   `;
 
   try {
@@ -48,7 +46,7 @@ export async function fetchCustomerData(request) {
           "X-Shopify-Access-Token": accessToken,
         },
         body: JSON.stringify({ query }),
-      }
+      },
     );
 
     const result = await response.json();
@@ -66,10 +64,10 @@ export async function fetchCustomerData(request) {
       name: `${node.firstName ?? ""} ${node.lastName ?? ""}`.trim() || "N/A",
       email: node.email ?? "N/A",
       phone: node.phone ?? "N/A",
-      address:
-        node.addresses.map((addr) => `${addr.country}`).join("; ") || "N/A",
+      address: node.addresses.map((addr) => addr.country).join("; ") || "N/A",
       orderCount: node.orders.nodes.length,
-      amountSpent: `${node.amountSpent.amount} ${node.amountSpent.currencyCode}` ?? "N/A",
+      amountSpent:
+        `${node.amountSpent.amount} ${node.amountSpent.currencyCode}` ?? "N/A",
       points: parseInt(node.metafield?.value ?? 0, 10),
     }));
   } catch (error) {
@@ -78,7 +76,7 @@ export async function fetchCustomerData(request) {
   }
 }
 
-// Hàm cập nhật điểm thưởng cho khách hàng
+// Function to update reward points for a customer
 export async function updateCustomerRewardPoints(request, customerId, points) {
   const { session } = await authenticate.admin(request);
   const { shop, accessToken } = session;
@@ -125,10 +123,10 @@ export async function updateCustomerRewardPoints(request, customerId, points) {
           query: EDIT_REWARD_POINTS_MUTATION,
           variables: {
             customerId,
-            points: points.toString(), // Chuyển số thành chuỗi
+            points: points.toString(), // Convert number to string
           },
         }),
-      }
+      },
     );
 
     const result = await response.json();
@@ -136,8 +134,8 @@ export async function updateCustomerRewardPoints(request, customerId, points) {
       console.error("Error updating reward points:", result.errors);
       throw new Error(
         result.errors?.[0]?.message ||
-        result.data.customerUpdate.userErrors[0]?.message ||
-        "Failed to update reward points."
+          result.data.customerUpdate.userErrors[0]?.message ||
+          "Failed to update reward points.",
       );
     }
 
@@ -147,4 +145,3 @@ export async function updateCustomerRewardPoints(request, customerId, points) {
     throw new Response("Failed to update reward points", { status: 500 });
   }
 }
-

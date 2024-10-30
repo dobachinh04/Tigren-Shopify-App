@@ -1,4 +1,0 @@
-Order 5752259608743 paid for customer 7856488087719. Calculated reward points: 70.
-
-Customer 7856488087719: 100 + 70 = 170 points
-

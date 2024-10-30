@@ -3,7 +3,7 @@
 client_id = "8d9b9ff2491862b70d72bcc0b992d226"
 name = "Tigren App"
 handle = "tigren-app-liam"
-application_url = "https://undefined-respiratory-unlimited-rom.trycloudflare.com"
+application_url = "https://manufactured-buying-became-represent.trycloudflare.com"
 embedded = true
 
 [build]
@@ -13,13 +13,13 @@ include_config_on_deploy = true
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "read_customers,read_orders,read_products,write_customers,write_orders,write_products"
+scopes = "read_customers,read_orders,read_payment_customizations,read_products,write_customers,write_orders,write_payment_customizations,write_products"
 
 [auth]
 redirect_urls = [
-  "https://undefined-respiratory-unlimited-rom.trycloudflare.com/auth/callback",
-  "https://undefined-respiratory-unlimited-rom.trycloudflare.com/auth/shopify/callback",
-  "https://undefined-respiratory-unlimited-rom.trycloudflare.com/api/auth/callback"
+  "https://manufactured-buying-became-represent.trycloudflare.com/auth/callback",
+  "https://manufactured-buying-became-represent.trycloudflare.com/auth/shopify/callback",
+  "https://manufactured-buying-became-represent.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
