@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Page,
   Card,
@@ -32,12 +32,23 @@ export const loader = async ({ request }) => {
 
 export const action = async ({ request }) => {
   const formData = await request.formData();
-  const customerId = formData.get("customerId");
+  const isMultiEdit = formData.get("isMultiEdit") === "true";
   const points = parseInt(formData.get("points"), 10);
 
   try {
-    await updateCustomerRewardPoints(request, customerId, points);
-    return json({ success: true });
+    if (isMultiEdit) {
+      const customerIds = JSON.parse(formData.get("customerIds"));
+      await Promise.all(
+        customerIds.map((customerId) =>
+          updateCustomerRewardPoints(request, customerId, points),
+        ),
+      );
+      return json({ success: true, multiEdit: true });
+    } else {
+      const customerId = formData.get("customerId");
+      await updateCustomerRewardPoints(request, customerId, points);
+      return json({ success: true });
+    }
   } catch (error) {
     console.error("Error updating reward points:", error);
     return json({ success: false, message: error.message }, { status: 500 });
@@ -53,73 +64,81 @@ function RewardPointsPage() {
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const { selectedResources, allResourcesSelected, handleSelectionChange } =
     useIndexResourceState(customers);
 
-  const handleEditPoints = async (id, currentPoints) => {
-    try {
-      const response = await fetcher.submit(
-        {
-          customerId: id,
-          points: editPoints[id] || currentPoints,
-        },
-        { method: "post" },
-      );
-
-      // Kiểm tra kết quả cập nhật từ fetcher
-      const result = await response.json();
-
-      if (result.success) {
-        // Làm mới dữ liệu khách hàng từ server để đảm bảo đồng bộ với Shopify
-        const updatedCustomers = await fetcher.load("/app/reward-points");
-        setCustomers(updatedCustomers);
-
-        setToastMessage("Points updated successfully!");
-      } else {
-        setToastMessage("Failed to update points.");
-      }
-    } catch (error) {
-      console.error("Error updating points:", error);
-      setToastMessage("An error occurred while updating points.");
-    } finally {
-      setSelectedCustomerId(null);
-      setShowToast(true);
-    }
+  const validatePoints = (value) => {
+    const parsedValue = parseInt(value, 10);
+    return (
+      !isNaN(parsedValue) && parsedValue > -1 && Number.isInteger(parsedValue)
+    );
   };
 
-  const handleMultiEdit = useCallback(async () => {
-    try {
-      const updates = selectedResources.map((id) => ({
-        customerId: id,
-        points: parseInt(multiEditPoints, 10) || 0,
-      }));
-
-      await Promise.all(
-        updates.map(({ customerId, points }) =>
-          fetcher.submit(
-            { customerId, points },
-            { method: "post", replace: true },
-          ),
-        ),
-      );
-
-      setCustomers((prev) =>
-        prev.map((customer) =>
-          selectedResources.includes(customer.id)
-            ? { ...customer, points: parseInt(multiEditPoints, 10) || 0 }
-            : customer,
-        ),
-      );
-
-      setToastMessage("Points updated successfully for selected customers.");
-    } catch (error) {
-      console.error("Error updating points:", error);
-      setToastMessage("Failed to update points for selected customers.");
-    } finally {
-      setMultiEditPoints("");
+  const handleEditPoints = (id, currentPoints) => {
+    if (!validatePoints(editPoints[id])) {
+      setToastMessage("Invalid input. Only positive integers are allowed.");
       setShowToast(true);
+      return;
     }
+
+    fetcher.submit(
+      {
+        customerId: id,
+        points: editPoints[id],
+      },
+      { method: "post" },
+    );
+
+    setCustomers((prevCustomers) =>
+      prevCustomers.map((customer) =>
+        customer.id === id
+          ? {
+              ...customer,
+              points: parseInt(editPoints[id], 10) || currentPoints,
+            }
+          : customer,
+      ),
+    );
+
+    setToastMessage("Points updated successfully!");
+    setShowToast(true);
+    setSelectedCustomerId(null);
+  };
+
+  const handleMultiEdit = useCallback(() => {
+    if (!validatePoints(multiEditPoints)) {
+      setToastMessage("Invalid input. Only positive integers are allowed.");
+      setShowToast(true);
+      return;
+    }
+
+    const customerIds = JSON.stringify(selectedResources);
+    const points = parseInt(multiEditPoints, 10);
+
+    fetcher.submit(
+      {
+        isMultiEdit: "true",
+        customerIds,
+        points,
+      },
+      { method: "post", replace: true },
+    );
+
+    setCustomers((prevCustomers) =>
+      prevCustomers.map((customer) =>
+        selectedResources.includes(customer.id)
+          ? { ...customer, points }
+          : customer,
+      ),
+    );
+
+    setToastMessage("Points updated successfully for selected customers.");
+    setShowToast(true);
+    setMultiEditPoints("");
   }, [multiEditPoints, selectedResources]);
 
   const renderEditForm = (id, currentPoints) => (
@@ -137,7 +156,18 @@ function RewardPointsPage() {
     </Layout.Section>
   );
 
-  const rowMarkup = customers.map(
+  const filteredCustomers = customers.filter((customer) =>
+    customer.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
+
+  const paginatedCustomers = filteredCustomers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
+
+  const totalPages = Math.ceil(filteredCustomers.length / itemsPerPage);
+
+  const rowMarkup = paginatedCustomers.map(
     (
       { id, name, email, phone, address, orderCount, amountSpent, points },
       index,
@@ -147,7 +177,9 @@ function RewardPointsPage() {
         key={id}
         selected={selectedResources.includes(id)}
       >
-        <IndexTable.Cell>{index + 1}</IndexTable.Cell>
+        <IndexTable.Cell>
+          {(currentPage - 1) * itemsPerPage + index + 1}
+        </IndexTable.Cell>
         <IndexTable.Cell>
           <Badge>{name}</Badge>
         </IndexTable.Cell>
@@ -155,7 +187,6 @@ function RewardPointsPage() {
         <IndexTable.Cell>{phone}</IndexTable.Cell>
         <IndexTable.Cell>{address}</IndexTable.Cell>
         <IndexTable.Cell>{orderCount}</IndexTable.Cell>
-        <IndexTable.Cell>{amountSpent}</IndexTable.Cell>
         <IndexTable.Cell>{points}</IndexTable.Cell>
         <IndexTable.Cell>
           {selectedCustomerId === id ? (
@@ -174,13 +205,15 @@ function RewardPointsPage() {
         <Card sectioned>
           <Layout>
             <Layout.Section>
-              <TextField
-                label="Multi Edit Reward Points"
-                type="number"
-                value={multiEditPoints}
-                onChange={(value) => setMultiEditPoints(value)}
-                placeholder="Enter points to set"
-              />
+              <div className="multi-edit-form">
+                <TextField
+                  label="Multi Edit Reward Points"
+                  type="number"
+                  value={multiEditPoints}
+                  onChange={(value) => setMultiEditPoints(value)}
+                  placeholder="Enter points to set"
+                />
+              </div>
               <Button
                 onClick={handleMultiEdit}
                 disabled={selectedResources.length === 0}
@@ -194,10 +227,19 @@ function RewardPointsPage() {
         </Card>
 
         <Card>
+          <div className="search-bar-container">
+            <TextField
+              label="Search Customers"
+              value={searchTerm}
+              onChange={(value) => setSearchTerm(value)}
+              placeholder="Search by name"
+              className="search-bar"
+            />
+          </div>
           <LegacyCard>
             <IndexTable
               resourceName={{ singular: "customer", plural: "customers" }}
-              itemCount={customers.length}
+              itemCount={filteredCustomers.length}
               selectedItemsCount={
                 allResourcesSelected ? "All" : selectedResources.length
               }
@@ -209,7 +251,6 @@ function RewardPointsPage() {
                 { title: "Phone" },
                 { title: "Address" },
                 { title: "Total Orders" },
-                { title: "Amount Spent" },
                 { title: "Reward Points" },
                 { title: "Action" },
               ]}
@@ -217,6 +258,28 @@ function RewardPointsPage() {
               {rowMarkup}
             </IndexTable>
           </LegacyCard>
+
+          <div className="pagination-container">
+            <button
+              className="pagination-button"
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <span className="pagination-info">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              className="pagination-button"
+              onClick={() =>
+                setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+              }
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </div>
         </Card>
 
         {showToast && (

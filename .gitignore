@@ -13,8 +13,8 @@ database.sqlite
 .env
 .env.*
 
-
-
+/themes/My-Dawn/
+themes/
 
 
 /extensions/*/dist
