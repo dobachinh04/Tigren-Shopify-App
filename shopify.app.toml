@@ -3,7 +3,7 @@
 client_id = "8d9b9ff2491862b70d72bcc0b992d226"
 name = "Tigren App"
 handle = "tigren-app-liam"
-application_url = "https://asp-certainly-weight-copyrights.trycloudflare.com"
+application_url = "https://refinance-opened-recommend-producer.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_customers,read_orders,read_payment_customizations,read_products,w
 
 [auth]
 redirect_urls = [
-  "https://asp-certainly-weight-copyrights.trycloudflare.com/auth/callback",
-  "https://asp-certainly-weight-copyrights.trycloudflare.com/auth/shopify/callback",
-  "https://asp-certainly-weight-copyrights.trycloudflare.com/api/auth/callback"
+  "https://refinance-opened-recommend-producer.trycloudflare.com/auth/callback",
+  "https://refinance-opened-recommend-producer.trycloudflare.com/auth/shopify/callback",
+  "https://refinance-opened-recommend-producer.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

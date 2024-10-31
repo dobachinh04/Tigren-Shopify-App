@@ -135,7 +135,7 @@ app.post("/webhook/orders/paid", (req, res) => {
 
 // Webhook - Đơn hàng đã hoàn tất
 app.post("/webhook/orders/fulfilled", async (req, res) => {
-  const { id: orderId, customer, total_price } = req.body;
+  const { id: orderId, customer, total_price, attributes } = req.body;
 
   if (!customer) {
     logToFile(`No customer information for order ${orderId}\n\n`);
@@ -143,6 +143,9 @@ app.post("/webhook/orders/fulfilled", async (req, res) => {
   }
 
   const customerId = customer.id;
+  const pointsUsed = attributes?.find(
+    (attr) => attr.key === "rewardPointsUsed",
+  )?.value;
 
   try {
     const metafieldId = await getCustomerMetafieldId(customerId);
@@ -152,12 +155,19 @@ app.post("/webhook/orders/fulfilled", async (req, res) => {
     }
 
     const currentPoints = await getCustomerRewardPoints(customerId);
-    const newPoints = Math.floor(total_price / 10); // 10 USD = 1 điểm
-    const totalPoints = currentPoints + newPoints;
+    const newPoints = Math.floor(total_price / 10);
+    let totalPoints = currentPoints + newPoints;
 
-    logToFile(
-      `Customer ${customerId}: ${currentPoints} + ${newPoints} = ${totalPoints} points\n\n`,
-    );
+    if (pointsUsed) {
+      totalPoints -= parseInt(pointsUsed, 10);
+      logToFile(
+        `Order ${orderId}: ${currentPoints} - ${pointsUsed} (used) + ${newPoints} = ${totalPoints} points\n\n`,
+      );
+    } else {
+      logToFile(
+        `Order ${orderId}: ${currentPoints} + ${newPoints} = ${totalPoints} points\n\n`,
+      );
+    }
 
     await updateCustomerRewardPoints(metafieldId, totalPoints);
     res.status(200).send("Reward points updated successfully.");
